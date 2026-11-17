@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uma carta para você</title>
+<!-- ============ TEXTOS DO SITE: É AQUI QUE VOCÊ EDITA ============ -->
+<script>
+/* ==========================================================
+   MENSAGENS DO SITE  (é só este bloco que você precisa editar)
+
+   - Troque apenas o texto que está entre aspas "assim".
+   - Não apague as aspas, as vírgulas no fim das linhas nem os [ ] e { }.
+   - Para usar aspas dentro de um texto, escreva \"assim\".
+   - Para ADICIONAR um momento, copie um bloco { ... }, inclusive a vírgula, e cole abaixo.
+   - Para REMOVER um momento, apague o bloco inteiro.
+   - Prints: coloque as imagens numa pasta chamada "prints" e escreva o
+     nome do arquivo em "prints". Se a imagem não existir, aparece uma
+     moldura de exemplo no lugar.
+   ========================================================== */
+const MENSAGENS = {
+
+  nome: "Eliza",                       // nome dela (aparece grande na abertura)
+  seuNome: "Seu nome",                 // quem assina a carta
+  inicio: "2024-11-17",                // dia em que começaram a namorar (AAAA-MM-DD)
+  dataCarta: "17 de novembro de 2026", // data que aparece no topo da carta
+
+  abertura: {
+    rotulo: "Uma carta feita com carinho",
+    titulo: "Para você,",
+    subtitulo: "Escrita com calma, guardada com carinho e feita só para esse dia.",
+    botao: "Começar"
+  },
+
+  momentosTopo: {
+    rotulo: "Nossa jornada",
+    titulo: "Antes da carta",
+    subtitulo: "Vale lembrar o caminho que a gente fez até aqui.",
+    botao: "Abrir minha carta"
+  },
+
+  momentos: [
+    {
+      titulo: "Nosso primeiro encontro",
+      texto: "Foi tão legal, mas a gente estava tão envergonhado que o silêncio falava mais que a conversa. Mesmo assim eu voltei pra casa já pensando no próximo.",
+      prints: []
+    },
+    {
+      titulo: "Eu te zoando",
+      texto: "Eu não perco a chance de te zoar por \"não querer me ver\". Você faz careta, eu rio, e a gente sabe que esse é o nosso jeito de dizer que sente falta.",
+      prints: []
+    },
+    {
+      titulo: "Os nossos textões",
+      texto: "Teve textão de um pro outro, daqueles que a gente lê duas vezes. Eu guardei os prints porque ali tem coisa que a gente nunca falaria em voz alta.",
+      prints: ["prints/textao1.png", "prints/textao2.png", "prints/textao3.png"]
+    },
+    {
+      titulo: "As brigas e como superamos",
+      texto: "A gente brigou, sim. Mas toda vez a gente sentou, conversou e saiu mais perto do que entrou. Superar junto virou parte da nossa história.",
+      prints: []
+    }
+  ],
+
+  envelope: {
+    nome: "Para Eliza",
+    dica: "Toque no envelope para abrir"
+  },
+
+  carta: {
+    saudacao: "Meu amor, Eliza,",
+    paragrafos: [
+      "Hoje faz mais um ano desde que a gente decidiu caminhar junto, e eu queria te dizer, com calma, o quanto isso mudou meus dias.",
+      "Você transformou coisas simples em momentos que eu guardo com carinho: uma risada boba, uma conversa até tarde, o jeito que você me olha quando acha que não estou vendo.",
+      "Você foi paciência quando eu precisei e foi bagunça boa quando a vida estava séria demais. Com você, até o dia comum ganha cor.",
+      "Eu não sei tudo o que vem pela frente, mas sei que quero viver isso ao seu lado. Feliz aniversário de namoro, Eliza."
+    ],
+    despedida: "Com todo o meu amor,",
+    pular: "mostrar a carta inteira"
+  },
+
+  final: {
+    legendaDias: "dias ao seu lado, e eu escolheria todos de novo",
+    botaoChuva: "Chuva de corações",
+    botaoReler: "Ler de novo"
+  }
+};
+</script>
+<!-- ============ DAQUI PARA BAIXO NÃO PRECISA MEXER ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07040f; --roxo: #6d3bf0; --ouro: #f0c929; --lav: #b9b0e8; --txt: #ece7ff;
+    --card: #170f30; --borda: #2e2352;
+    --titulo: "Cinzel", "Trajan Pro", Georgia, serif;
+    --corpo: "Poppins", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--corpo); color: var(--txt); min-height: 100vh; background: var(--bg); overflow-x: hidden; }
+
+  .fundo { position: fixed; inset: 0; z-index: 0; background:
+    radial-gradient(ellipse 65% 42% at 50% 18%, rgba(110,60,220,.3), transparent 70%),
+    radial-gradient(ellipse 50% 30% at 50% 100%, rgba(110,60,220,.14), transparent 70%),
+    linear-gradient(180deg, #07040f, #0c0720 55%, #100829); }
+  #fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
+
+  main { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2.4rem 1.2rem 5rem; }
+  .cena { display: none; width: 100%; max-width: 36rem; flex-direction: column; align-items: center; }
+  .cena.ativa { display: flex; animation: entrar 1s cubic-bezier(.22, 1, .36, 1) backwards; }
+  .cena.saindo { opacity: 0; transition: opacity .6s ease; pointer-events: none; }
+  @keyframes entrar { from { opacity: 0; } to { opacity: 1; } }
+
+  .eyebrow { font-family: var(--titulo); font-weight: 700; font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; color: var(--ouro); }
+  .divisor { display: flex; align-items: center; gap: .8rem; color: var(--ouro); font-size: .8rem; margin: 1.3rem auto; width: min(14rem, 60%); }
+  .divisor::before, .divisor::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(240,201,41,.6)); }
+  .divisor::after { transform: scaleX(-1); }
+  .btn { font-family: var(--corpo); font-weight: 600; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: var(--roxo); border: 1px solid var(--roxo); border-radius: 3px; padding: .9rem 1.8rem; min-height: 46px; cursor: pointer; box-shadow: 0 0 22px rgba(109,59,240,.4); transition: background .5s ease, box-shadow .5s ease, border-color .5s ease; }
+  .btn:hover { background: #7d50f5; box-shadow: 0 0 32px rgba(125,80,245,.55); }
+  .btn.sec { background: transparent; border-color: rgba(255,255,255,.6); box-shadow: none; }
+  .btn.sec:hover { background: rgba(255,255,255,.08); }
+  .btn:focus-visible, .pular:focus-visible, .envelope-btn:focus-visible { outline: 3px solid var(--ouro); outline-offset: 4px; }
+  .sub { font-size: .95rem; line-height: 1.85; color: var(--lav); max-width: 27rem; font-weight: 300; text-align: center; }
+
+  /* ---------- Abertura ---------- */
+  #intro { min-height: 88vh; justify-content: center; text-align: center; }
+  #intro h1 { font-family: var(--titulo); font-weight: 600; font-size: clamp(2.3rem, 10vw, 4.2rem); line-height: 1.12; text-transform: uppercase; color: #f1ecff; margin-top: 1.2rem; }
+  #intro h1 b { display: block; color: var(--ouro); font-weight: 600; }
+  #intro .btn { margin-top: 2.4rem; }
+
+  /* ---------- Momentos (linha do tempo) ---------- */
+  #cena-mom { padding-top: 2rem; }
+  .topo { text-align: center; margin-bottom: 2.6rem; }
+  .topo h2 { font-family: var(--titulo); font-weight: 600; text-transform: uppercase; font-size: clamp(1.9rem, 7vw, 2.6rem); color: #f1ecff; margin: .8rem 0 0; }
+  #momentos { position: relative; width: 100%; padding-left: 1.9rem; display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 3rem; }
+  #momentos::before { content: ""; position: absolute; left: .5rem; top: .6rem; bottom: .6rem; width: 1px; background: linear-gradient(180deg, var(--ouro), var(--roxo) 70%, transparent); opacity: .6; }
+  .mom { position: relative; background: linear-gradient(180deg, #1b1236, var(--card)); border: 1px solid var(--borda); border-radius: 6px; padding: 1.6rem 1.5rem; opacity: 0; transform: translateY(18px); transition: opacity 1.1s cubic-bezier(.22, 1, .36, 1), transform 1.1s cubic-bezier(.22, 1, .36, 1); }
+  .mom.vis { opacity: 1; transform: none; }
+  .mom::before { content: ""; position: absolute; left: calc(-1.4rem - 5px); top: 1.9rem; width: 9px; height: 9px; border-radius: 50%; background: var(--ouro); box-shadow: 0 0 0 4px rgba(240,201,41,.15), 0 0 14px rgba(240,201,41,.5); }
+  .mom h3 { font-family: var(--titulo); font-weight: 700; text-transform: uppercase; font-size: 1rem; letter-spacing: .04em; color: var(--ouro); margin-bottom: .7rem; }
+  .mom p { font-size: .93rem; line-height: 1.85; color: var(--lav); font-weight: 300; }
+  .prints { display: flex; flex-wrap: wrap; gap: .9rem; justify-content: center; margin-top: 1.5rem; }
+  .print { width: clamp(7.4rem, 28vw, 9.4rem); aspect-ratio: 9 / 17; border-radius: 1.2rem; border: 3px solid var(--borda); background: #0f0a22; overflow: hidden; cursor: zoom-in; transition: border-color .5s ease; }
+  .print:hover { border-color: rgba(240,201,41,.6); }
+  .print img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph { width: 100%; height: 100%; padding: .9rem .6rem; display: flex; flex-direction: column; gap: .5rem; justify-content: center; }
+  .ph i { display: block; height: .8rem; border-radius: .5rem; background: rgba(109,59,240,.35); width: 70%; }
+  .ph i:nth-child(even) { align-self: flex-end; background: rgba(240,201,41,.25); width: 58%; }
+  .ph small { margin-top: .5rem; font-size: .75rem; color: var(--lav); text-align: center; }
+  .zoom { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: rgba(5,3,12,.92); padding: 1rem; cursor: zoom-out; opacity: 0; pointer-events: none; transition: opacity .5s ease; }
+  .zoom.on { opacity: 1; pointer-events: auto; }
+  .zoom img { max-width: 100%; max-height: 92vh; border-radius: 1rem; }
+
+  /* ---------- Envelope ---------- */
+  #cena-env { min-height: 80vh; justify-content: center; text-align: center; }
+  .envelope-btn { all: unset; cursor: pointer; position: relative; display: block; width: min(21rem, 84vw); aspect-ratio: 4 / 2.9; perspective: 900px; }
+  .envelope-btn:focus-visible { outline: 3px solid var(--ouro); outline-offset: 10px; }
+  .env-corpo { position: absolute; inset: 0; background: linear-gradient(160deg, #2b1b58, #1a1033); border: 1px solid rgba(240,201,41,.45); border-radius: 6px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.5), 0 0 40px rgba(109,59,240,.2); transition: box-shadow .6s ease; }
+  .envelope-btn:hover .env-corpo { box-shadow: 0 18px 40px rgba(0,0,0,.5), 0 0 60px rgba(109,59,240,.45); }
+  .env-corpo::after { content: ""; position: absolute; inset: 0; background: #231545; clip-path: polygon(0 100%, 50% 42%, 100% 100%); }
+  .env-nome { position: absolute; left: 0; right: 0; bottom: 13%; z-index: 2; font-family: var(--titulo); font-weight: 600; font-size: clamp(.95rem, 4vw, 1.2rem); letter-spacing: .12em; text-transform: uppercase; color: var(--ouro); text-align: center; }
+  .env-aba { position: absolute; top: 0; left: 0; right: 0; height: 58%; background: linear-gradient(180deg, #3a2478, #2c1b5c); clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top; transition: transform 1.2s cubic-bezier(.45, 0, .2, 1); z-index: 3; }
+  .env-lacre { position: absolute; left: 50%; top: 52%; width: 3.4rem; height: 3.4rem; margin: -1.7rem 0 0 -1.7rem; border-radius: 50%; z-index: 4; display: grid; place-items: center; font-size: 1.3rem; color: #2a1b00; background: radial-gradient(circle at 35% 30%, #ffe07a, var(--ouro) 55%, #b88f00); box-shadow: 0 4px 12px rgba(0,0,0,.45); transition: opacity .8s ease, transform .8s ease; }
+  .envelope-btn[aria-expanded="true"] .env-aba { transform: rotateX(180deg); }
+  .envelope-btn[aria-expanded="true"] .env-lacre { opacity: 0; transform: scale(1.4); }
+  .env-dica { margin-top: 1.8rem; font-size: .9rem; color: var(--lav); font-weight: 300; }
+
+  /* ---------- Carta ---------- */
+  #cena-carta { padding-top: 1rem; }
+  .carta { position: relative; width: 100%; background: linear-gradient(180deg, #1b1236, var(--card)); border: 1px solid rgba(240,201,41,.4); border-radius: 6px; padding: clamp(2.2rem, 8vw, 3.4rem) clamp(1.5rem, 7vw, 3rem) clamp(1.8rem, 6vw, 2.6rem); box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 60px rgba(109,59,240,.15); }
+  .carta::before { content: ""; position: absolute; inset: .55rem; border: 1px solid var(--borda); border-radius: 3px; pointer-events: none; }
+  .data { text-align: right; font-size: .8rem; color: var(--lav); font-weight: 300; letter-spacing: .06em; }
+  .saudacao { font-family: var(--titulo); font-weight: 600; font-size: clamp(1.5rem, 6vw, 2rem); color: var(--ouro); margin-bottom: 1.6rem; }
+  .par { font-size: clamp(.98rem, 3.8vw, 1.06rem); line-height: 2; font-weight: 300; color: var(--txt); margin-bottom: 1.5rem; }
+  .w { opacity: 0; transition: opacity 1.9s cubic-bezier(.33, 0, .2, 1); }
+  .lendo .w { opacity: 1; }
+  .saudacao, .final { opacity: 0; transition: opacity 1.8s ease; }
+  .saudacao.on, .final.on { opacity: 1; }
+  .final { margin-top: 2rem; text-align: right; }
+  .final .com { font-size: .92rem; font-weight: 300; color: var(--lav); }
+  .final .de { font-family: var(--titulo); font-weight: 600; font-size: 1.5rem; color: var(--ouro); margin-top: .3rem; }
+  .selo { display: inline-grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%; margin-top: .8rem; font-size: 1rem; color: #2a1b00; background: radial-gradient(circle at 35% 30%, #ffe07a, var(--ouro) 55%, #b88f00); }
+  .pular { margin-top: 1.4rem; background: none; border: 0; color: var(--lav); opacity: .7; font: 300 .85rem var(--corpo); cursor: pointer; text-decoration: underline; transition: opacity .4s; }
+  .pular:hover { opacity: 1; }
+  .depois { display: none; text-align: center; margin-top: 2.8rem; flex-direction: column; align-items: center; }
+  .depois.vis { display: flex; animation: entrar 1.4s ease backwards; }
+  .depois .num { font-family: var(--titulo); font-weight: 600; font-size: clamp(2.8rem, 12vw, 4.2rem); color: var(--ouro); line-height: 1.1; }
+  .depois .leg { font-size: .9rem; color: var(--lav); font-weight: 300; margin-top: .4rem; }
+  .botoes { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; margin-top: 1.8rem; }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+<div class="fundo" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="zoom" id="zoom"><img alt="Print ampliado" id="zoomImg"></div>
+
+<main>
+  <section class="cena ativa" id="intro">
+    <span class="eyebrow" id="aRotulo"></span>
+    <h1><span id="aTitulo"></span> <b id="nome"></b></h1>
+    <div class="divisor" aria-hidden="true">♥</div>
+    <p class="sub" id="aSub"></p>
+    <button class="btn" id="comecar" type="button"></button>
+  </section>
+
+  <section class="cena" id="cena-mom">
+    <div class="topo">
+      <span class="eyebrow" id="mRotulo"></span>
+      <h2 id="mTitulo"></h2>
+      <div class="divisor" aria-hidden="true">♥</div>
+      <p class="sub" id="mSub"></p>
+    </div>
+    <div id="momentos"></div>
+    <button class="btn" id="irCarta" type="button"></button>
+  </section>
+
+  <section class="cena" id="cena-env">
+    <button class="envelope-btn" id="envelope" aria-expanded="false" aria-label="Abrir o envelope">
+      <span class="env-corpo"></span><span class="env-nome" id="envNome"></span>
+      <span class="env-aba"></span><span class="env-lacre" aria-hidden="true">♥</span>
+    </button>
+    <p class="env-dica" id="envDica"></p>
+  </section>
+
+  <section class="cena" id="cena-carta">
+    <article class="carta" id="carta" aria-live="polite">
+      <div class="data" id="data"></div>
+      <div class="divisor" aria-hidden="true">♥</div>
+      <div class="saudacao" id="saudacao"></div>
+      <div id="paragrafos"></div>
+      <div class="final" id="final">
+        <p class="com" id="despedida"></p>
+        <p class="de" id="de"></p>
+        <span class="selo" aria-hidden="true">♥</span>
+      </div>
+    </article>
+    <button class="pular" id="pular" type="button"></button>
+    <div class="depois" id="depois">
+      <div class="num" id="num"></div>
+      <div class="leg" id="legDias"></div>
+      <div class="botoes">
+        <button class="btn" id="chuva" type="button"></button>
+        <button class="btn sec" id="reler" type="button"></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  if (typeof MENSAGENS === "undefined") {
+    document.body.innerHTML = '<p style="color:#fff;font:16px/1.6 system-ui,sans-serif;padding:2rem;max-width:34rem;margin:auto">Ops! Tem um erro nos textos (bloco MENSAGENS, no começo do arquivo index.html). Confira se não faltou alguma aspa <b>"</b> ou vírgula <b>,</b> no fim das linhas.</p>';
+    throw new Error("MENSAGENS não carregou");
+  }
+  const M = MENSAGENS;
+  const $ = (id) => document.getElementById(id);
+  const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Textos vindos do bloco MENSAGENS ---------- */
+  document.title = M.abertura.titulo + " " + M.nome;
+  $("aRotulo").textContent = M.abertura.rotulo; $("aTitulo").textContent = M.abertura.titulo; $("nome").textContent = M.nome;
+  $("aSub").textContent = M.abertura.subtitulo; $("comecar").textContent = M.abertura.botao;
+  $("mRotulo").textContent = M.momentosTopo.rotulo; $("mTitulo").textContent = M.momentosTopo.titulo;
+  $("mSub").textContent = M.momentosTopo.subtitulo; $("irCarta").textContent = M.momentosTopo.botao;
+  $("envNome").textContent = M.envelope.nome; $("envDica").textContent = M.envelope.dica;
+  $("data").textContent = M.dataCarta; $("saudacao").textContent = M.carta.saudacao;
+  $("despedida").textContent = M.carta.despedida; $("de").textContent = M.seuNome; $("pular").textContent = M.carta.pular;
+  $("legDias").textContent = M.final.legendaDias; $("chuva").textContent = M.final.botaoChuva; $("reler").textContent = M.final.botaoReler;
+
+  /* ---------- Corações lentos e suaves ---------- */
+  const fx = $("fx"), fc = fx.getContext("2d");
+  let W = 0, H = 0;
+  function ajustar() { W = fx.width = innerWidth; H = fx.height = innerHeight; }
+  let tmr; addEventListener("resize", () => { clearTimeout(tmr); tmr = setTimeout(ajustar, 200); }); ajustar();
+  function sprite(t, cor) {
+    const c = document.createElement("canvas"); c.width = c.height = t * 1.3; const x = c.getContext("2d");
+    x.translate(c.width / 2, c.height * .52); x.fillStyle = cor; x.beginPath();
+    x.moveTo(0, t * .35); x.bezierCurveTo(-t * .7, -t * .1, -t * .35, -t * .55, 0, -t * .2);
+    x.bezierCurveTo(t * .35, -t * .55, t * .7, -t * .1, 0, t * .35); x.fill(); return c;
+  }
+  const sprites = [14, 20, 28].flatMap((t) => [sprite(t, "#f0c929"), sprite(t, "#a78bfa")]);
+  let cora = [];
+  function novo(fundo, forte) {
+    return { x: Math.random() * W, y: fundo ? Math.random() * H : -40 - Math.random() * (forte ? 260 : 40), s: sprites[Math.floor(Math.random() * sprites.length)],
+      vy: forte ? .9 + Math.random() * .8 : .15 + Math.random() * .2, vx: (Math.random() - .5) * .15, a: Math.random() * 6.28, va: (Math.random() - .5) * .006,
+      o: forte ? .32 + Math.random() * .25 : .1 + Math.random() * .14, ph: Math.random() * 6.28, extra: !!forte };
+  }
+  if (!reduz) cora = Array.from({ length: 10 }, () => novo(true, false));
+  let ultimo = 0, raf = 0;
+  function loop(t) {
+    const d = Math.min(40, t - ultimo) / 16.67; ultimo = t;
+    fc.setTransform(1, 0, 0, 1, 0, 0); fc.clearRect(0, 0, W, H);
+    for (let i = cora.length - 1; i >= 0; i--) {
+      const p = cora[i];
+      p.y += p.vy * d; p.ph += .008 * d; p.x += (p.vx + Math.sin(p.ph) * .12) * d; p.a += p.va * d;
+      if (p.y > H + 40) { if (p.extra) { cora.splice(i, 1); continue; } Object.assign(p, novo(false, false)); }
+      const w = p.s.width; fc.globalAlpha = p.o;
+      fc.setTransform(Math.cos(p.a), Math.sin(p.a), -Math.sin(p.a), Math.cos(p.a), p.x, p.y);
+      fc.drawImage(p.s, -w / 2, -w / 2);
+    }
+    raf = requestAnimationFrame(loop);
+  }
+  if (!reduz) raf = requestAnimationFrame(loop);
+  document.addEventListener("visibilitychange", () => { cancelAnimationFrame(raf); if (!document.hidden && !reduz) { ultimo = performance.now(); raf = requestAnimationFrame(loop); } });
+  function chuva(n) { if (reduz) return; for (let i = 0; i < n; i++) cora.push(novo(false, true)); }
+
+  /* ---------- Momentos ---------- */
+  M.momentos.forEach((m, i) => {
+    const el = document.createElement("article"); el.className = "mom"; el.style.transitionDelay = (i % 2) * .12 + "s";
+    el.innerHTML = "<h3></h3><p></p>";
+    el.querySelector("h3").textContent = m.titulo; el.querySelector("p").textContent = m.texto;
+    if (m.prints && m.prints.length) {
+      const box = document.createElement("div"); box.className = "prints";
+      m.prints.forEach((src) => {
+        const f = document.createElement("div"); f.className = "print";
+        const img = new Image(); img.src = src; img.alt = "Print de uma conversa nossa"; img.loading = "lazy"; img.decoding = "async";
+        img.onerror = () => { f.innerHTML = '<div class="ph"><i></i><i></i><i></i><i></i><small>seu print aqui</small></div>'; f.style.cursor = "default"; f.onclick = null; };
+        f.onclick = () => { $("zoomImg").src = src; $("zoom").classList.add("on"); };
+        f.appendChild(img); box.appendChild(f);
+      });
+      el.appendChild(box);
+    }
+    $("momentos").appendChild(el);
+  });
+  $("zoom").addEventListener("click", () => $("zoom").classList.remove("on"));
+  const obs = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("vis"); obs.unobserve(e.target); } }), { threshold: .15 }) : null;
+  function observar() { document.querySelectorAll(".mom").forEach((m) => obs ? obs.observe(m) : m.classList.add("vis")); }
+
+  /* ---------- Troca de telas com fade suave ---------- */
+  let ocupado = false;
+  function trocar(de, para) {
+    return new Promise((ok) => {
+      $(de).classList.add("saindo");
+      setTimeout(() => {
+        $(de).classList.remove("ativa", "saindo");
+        scrollTo(0, 0);
+        $(para).classList.add("ativa"); ok();
+      }, reduz ? 0 : 650);
+    });
+  }
+  $("comecar").addEventListener("click", async () => { if (ocupado) return; ocupado = true; try { chuva(8); await trocar("intro", "cena-mom"); observar(); } finally { ocupado = false; } });
+  $("irCarta").addEventListener("click", async () => { if (ocupado) return; ocupado = true; try { await trocar("cena-mom", "cena-env"); } finally { ocupado = false; } });
+  $("envelope").addEventListener("click", async () => {
+    const e = $("envelope"); if (ocupado || e.getAttribute("aria-expanded") === "true") return; ocupado = true;
+    e.setAttribute("aria-expanded", "true");
+    try { await new Promise((ok) => setTimeout(ok, reduz ? 0 : 1300)); await trocar("cena-env", "cena-carta"); } finally { ocupado = false; }
+    ler();
+  });
+
+  /* ---------- Leitura: cada palavra recebe seu tempo e o CSS faz o fade, sem engasgos ---------- */
+  let fimLeitura = null, seguindo = 0, usuario = false, leituraId = 0;
+  ["wheel", "touchstart", "keydown"].forEach((ev) => addEventListener(ev, () => { usuario = true; }, { passive: true }));
+
+  function ler() {
+    clearTimeout(fimLeitura); cancelAnimationFrame(seguindo); usuario = false;
+    const id = ++leituraId;
+    const box = $("paragrafos"); box.className = ""; box.innerHTML = "";
+    $("saudacao").classList.remove("on"); $("final").classList.remove("on"); $("depois").classList.remove("vis");
+    $("pular").style.display = "";
+
+    const lista = []; let t = 2800;                       // a primeira palavra surge depois da saudação
+    M.carta.paragrafos.forEach((txt) => {
+      const p = document.createElement("p"); p.className = "par";
+      const ws = txt.split(" ");
+      ws.forEach((w, i) => {
+        const s = document.createElement("span"); s.className = "w"; s.textContent = w;
+        s.style.transitionDelay = t + "ms"; p.appendChild(s);
+        if (i < ws.length - 1) p.appendChild(document.createTextNode(" "));
+        lista.push({ s, t });
+        t += 85 + w.length * 13 + (/[.!?]$/.test(w) ? 480 : /[,:;]$/.test(w) ? 230 : 0);
+      });
+      t += 650; box.appendChild(p);
+    });
+    void box.offsetWidth;                                 // garante que o ponto de partida foi desenhado
+    $("saudacao").classList.add("on"); box.classList.add("lendo");
+
+    const ini = performance.now(); let k = 0;
+    function passo(agora) {                               // acompanha a leitura rolando a tela devagarinho
+      if (id !== leituraId || usuario) return;
+      const dec = agora - ini;
+      while (k < lista.length - 1 && lista[k + 1].t <= dec) k++;
+      if (dec >= lista[k].t) {
+        const r = lista[k].s.getBoundingClientRect(), alvo = innerHeight * 0.62;
+        if (r.bottom > alvo) { const d = r.bottom - alvo; scrollBy(0, Math.min(d, Math.max(1, d * 0.07))); }
+      }
+      seguindo = requestAnimationFrame(passo);
+    }
+    seguindo = requestAnimationFrame(passo);
+    fimLeitura = setTimeout(() => { if (id === leituraId) terminar(false); }, t + 1600);
+  }
+
+  function terminar(rapido) {
+    cancelAnimationFrame(seguindo);
+    $("pular").style.display = "none"; $("final").classList.add("on");
+    const d = Math.max(0, Math.floor((new Date() - new Date(M.inicio + "T00:00:00")) / 86400000));
+    $("num").textContent = d.toLocaleString("pt-BR");
+    fimLeitura = setTimeout(() => { $("depois").classList.add("vis"); chuva(26); $("depois").scrollIntoView({ block: "center", behavior: "smooth" }); }, rapido ? 700 : 1800);
+  }
+
+  $("pular").addEventListener("click", () => {
+    clearTimeout(fimLeitura); cancelAnimationFrame(seguindo); leituraId++;
+    $("pular").style.display = "none"; $("saudacao").classList.add("on");
+    const ws = Array.from(document.querySelectorAll(".w"));           // continua de onde cada palavra está, sem esperar o tempo dela
+    const atual = ws.map((s) => getComputedStyle(s).opacity);
+    ws.forEach((s, i) => { s.style.transition = "none"; s.style.opacity = atual[i]; });
+    void document.body.offsetWidth;
+    ws.forEach((s) => { s.style.transition = "opacity .8s ease"; s.style.opacity = "1"; });
+    fimLeitura = setTimeout(() => terminar(true), 900);
+  });
+  $("chuva").addEventListener("click", () => chuva(36));
+  $("reler").addEventListener("click", () => { scrollTo(0, 0); ler(); });
+</script>
+</body>
+</html>
