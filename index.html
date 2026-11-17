@@ -14,6 +14,10 @@
    - Para usar aspas dentro de um texto, escreva \"assim\".
    - Para ADICIONAR um momento, copie um bloco { ... }, inclusive a vírgula, e cole abaixo.
    - Para REMOVER um momento, apague o bloco inteiro.
+   - QUIZ: em cada pergunta, escreva a resposta certa em "correta" e as 3
+     erradas em "erradas". O site embaralha as opções sozinho.
+     "secao" é "nos" (sobre nós) ou "eu" (sobre mim).
+     Onde aparece [troque: ...], escreva a resposta de verdade.
    - Prints: coloque as imagens numa pasta chamada "prints" e escreva o
      nome do arquivo em "prints". Se a imagem não existir, aparece uma
      moldura de exemplo no lugar.
@@ -62,6 +66,92 @@ const MENSAGENS = {
     }
   ],
 
+  topo: {
+    marca: "Para Eliza",
+    menu: "Início",
+    carta: "Cartinha",
+    quiz: "Quiz"
+  },
+  rodape: "© 2026 · Feito com amor, só para você.",
+
+  menu: {
+    rotulo: "Duas surpresas",
+    titulo: "Por onde começamos?",
+    subtitulo: "Escolha uma delas. Dá para fazer as duas, na ordem que quiser.",
+    carta: { titulo: "A cartinha", texto: "Uma carta escrita só para você, com um pouco da nossa história." },
+    quiz: { titulo: "O quiz do casal", texto: "10 perguntas: 5 sobre nós e 5 sobre mim. Será que você acerta todas?" },
+    voltar: "← Voltar ao menu"
+  },
+
+  quiz: {
+    rotulo: "Nossa brincadeira",
+    titulo: "Quiz do casal",
+    subtitulo: "Descubra o quanto você sabe sobre nós dois e sobre mim.",
+    boasVindas: "Bem-vinda ao quiz!",
+    intro: "Você está prestes a testar o quanto a gente se conhece. O resultado é só uma brincadeira, para a gente rir junto no final.",
+    comoTitulo: "Como funciona:",
+    comoFunciona: [
+      "Leia cada pergunta com atenção.",
+      "Escolha a alternativa que você acha certa. Só uma está certa.",
+      "São 10 perguntas: 5 sobre nós e 5 sobre mim.",
+      "No final, você vê a sua pontuação."
+    ],
+    tituloPergunta: "Pergunta",
+    voltar: "Voltar",
+    botaoMenu: "Voltar ao menu",
+    botaoComecar: "Começar o quiz",
+    proxima: "Próxima",
+    verResultado: "Ver resultado",
+    secaoNos: "Sobre nós",
+    secaoEu: "Sobre mim",
+    acerto: "Acertou!",
+    erro: "Quase! A certa era:",
+    resultadoTitulo: "Seu resultado",
+    irCarta: "Ler a cartinha",
+    refazer: "Refazer o quiz",
+    resultados: [
+      { minimo: 10, texto: "Gabaritou! Você me conhece, e conhece a gente, como ninguém." },
+      { minimo: 8,  texto: "Mandou muito bem! Faltou quase nada." },
+      { minimo: 5,  texto: "Foi bem, mas ainda tem muita coisa para eu te contar." },
+      { minimo: 0,  texto: "Calma, a gente tem a vida inteira para você me conhecer melhor." }
+    ],
+    perguntas: [
+      /* ---------- SOBRE NÓS ---------- */
+      { secao: "nos", pergunta: "Quando foi que a gente se conheceu?",
+        correta: "[troque: a data certa]",
+        erradas: ["[troque: opção errada 1]", "[troque: opção errada 2]", "[troque: opção errada 3]"] },
+      { secao: "nos", pergunta: "Quem falou \"eu te amo\" primeiro?",
+        correta: "Eu",                                  // CONFIRA: troque se não for essa
+        erradas: ["Você", "Os dois ao mesmo tempo", "Nenhum de nós lembra"] },
+      { secao: "nos", pergunta: "Qual foi o primeiro assunto da nossa primeira conversa?",
+        correta: "[troque: o assunto certo]",
+        erradas: ["[troque: opção errada 1]", "[troque: opção errada 2]", "[troque: opção errada 3]"] },
+      { secao: "nos", pergunta: "Qual é a nossa maior piada interna?",
+        correta: "[troque: a piada certa]",
+        erradas: ["[troque: opção errada 1]", "[troque: opção errada 2]", "[troque: opção errada 3]"] },
+      { secao: "nos", pergunta: "Qual foi o primeiro presente que eu disse que ia te dar?",
+        correta: "[troque: o presente certo]",
+        erradas: ["[troque: opção errada 1]", "[troque: opção errada 2]", "[troque: opção errada 3]"] },
+
+      /* ---------- SOBRE MIM ---------- */
+      { secao: "eu", pergunta: "Qual é a data do meu aniversário?",
+        correta: "27/07/2008",
+        erradas: ["27/08/2008", "17/07/2008", "27/07/2007"] },
+      { secao: "eu", pergunta: "Qual é o nome do meu amigo doido?",
+        correta: "Paulo",
+        erradas: ["Pedro", "Lucas", "Gabriel"] },
+      { secao: "eu", pergunta: "Qual foi o meu primeiro amor?",
+        correta: "Santos",                              // CONFIRA: troque se não for essa
+        erradas: ["Neymar", "Palmeiras", "Videogame"] },
+      { secao: "eu", pergunta: "Eu sou nerd por quê?",
+        correta: "História",
+        erradas: ["Matemática", "Tecnologia", "Geografia"] },
+      { secao: "eu", pergunta: "Qual é o wallpaper do meu celular?",
+        correta: "[troque: o wallpaper certo]",
+        erradas: ["[troque: opção errada 1]", "[troque: opção errada 2]", "[troque: opção errada 3]"] }
+    ]
+  },
+
   envelope: {
     nome: "Para Eliza",
     dica: "Toque no envelope para abrir"
@@ -82,7 +172,8 @@ const MENSAGENS = {
   final: {
     legendaDias: "dias ao seu lado, e eu escolheria todos de novo",
     botaoChuva: "Chuva de corações",
-    botaoReler: "Ler de novo"
+    botaoReler: "Ler de novo",
+    botaoQuiz: "Fazer o quiz"
   }
 };
 </script>
@@ -106,7 +197,7 @@ const MENSAGENS = {
     linear-gradient(180deg, #07040f, #0c0720 55%, #100829); }
   #fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
 
-  main { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2.4rem 1.2rem 5rem; }
+  main { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 5.4rem 1.2rem 2rem; }
   .cena { display: none; width: 100%; max-width: 36rem; flex-direction: column; align-items: center; }
   .cena.ativa { display: flex; animation: entrar 1s cubic-bezier(.22, 1, .36, 1) backwards; }
   .cena.saindo { opacity: 0; transition: opacity .6s ease; pointer-events: none; }
@@ -121,7 +212,7 @@ const MENSAGENS = {
   .btn.sec { background: transparent; border-color: rgba(255,255,255,.6); box-shadow: none; }
   .btn.sec:hover { background: rgba(255,255,255,.08); }
   .btn:focus-visible, .pular:focus-visible, .envelope-btn:focus-visible { outline: 3px solid var(--ouro); outline-offset: 4px; }
-  .sub { font-size: .95rem; line-height: 1.85; color: var(--lav); max-width: 27rem; font-weight: 300; text-align: center; }
+  .sub { font-size: .95rem; line-height: 1.85; color: var(--lav); max-width: 27rem; margin-left: auto; margin-right: auto; font-weight: 300; text-align: center; }
 
   /* ---------- Abertura ---------- */
   #intro { min-height: 88vh; justify-content: center; text-align: center; }
@@ -189,6 +280,77 @@ const MENSAGENS = {
   .depois .leg { font-size: .9rem; color: var(--lav); font-weight: 300; margin-top: .4rem; }
   .botoes { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; margin-top: 1.8rem; }
 
+  /* ---------- Menu e quiz ---------- */
+  .menu-cards { width: 100%; display: grid; gap: 1rem; margin-top: .6rem; }
+  .opcao { all: unset; box-sizing: border-box; display: block; position: relative; width: 100%; cursor: pointer; background: linear-gradient(180deg, #1b1236, var(--card)); border: 1px solid var(--borda); border-radius: 6px; padding: 1.5rem 1.4rem 1.5rem 4.6rem; transition: border-color .5s ease, box-shadow .5s ease; }
+  .opcao:hover { border-color: rgba(240,201,41,.55); box-shadow: 0 0 36px rgba(109,59,240,.3); }
+  .opcao:focus-visible { outline: 3px solid var(--ouro); outline-offset: 4px; }
+  .opcao .ic { position: absolute; left: 1.3rem; top: 1.45rem; width: 2.3rem; height: 2.3rem; border: 1px solid var(--ouro); border-radius: 50%; display: grid; place-items: center; color: var(--ouro); font: 700 1rem var(--titulo); }
+  .opcao h3 { font-family: var(--titulo); font-weight: 700; text-transform: uppercase; font-size: 1rem; letter-spacing: .04em; color: var(--ouro); margin-bottom: .5rem; }
+  .opcao p { font-size: .9rem; line-height: 1.7; color: var(--lav); font-weight: 300; }
+  .opcao.feito::after { content: "✓"; position: absolute; right: 1.1rem; top: 1rem; font-size: .9rem; color: var(--ouro); }
+  .voltar { align-self: flex-start; background: none; border: 0; color: var(--lav); opacity: .8; font: 300 .85rem var(--corpo); cursor: pointer; margin-bottom: 1.4rem; transition: opacity .4s; }
+  .voltar:hover { opacity: 1; }
+  .voltar:focus-visible { outline: 3px solid var(--ouro); outline-offset: 3px; }
+  #cena-quiz-intro, #cena-resultado { text-align: center; }
+  #cena-quiz-intro .topo { margin-top: 1rem; }
+  #cena-quiz { padding-top: 1.4rem; }
+  .qcartao { width: 100%; transition: opacity .38s ease; }
+  .qcartao.some { opacity: 0; }
+  .qtopo { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .9rem; }
+  .qcont { font-size: .8rem; color: var(--lav); font-weight: 300; }
+  .barra { height: 3px; background: var(--borda); border-radius: 2px; overflow: hidden; margin-bottom: 2rem; }
+  .barra i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--roxo), var(--ouro)); transition: width .8s cubic-bezier(.22, 1, .36, 1); }
+  .qtexto { font: 500 1.2rem/1.55 var(--corpo); color: #f1ecff; margin-bottom: 1.7rem; }
+  .qops { display: flex; flex-direction: column; gap: .75rem; }
+  .qop { all: unset; box-sizing: border-box; display: block; width: 100%; cursor: pointer; padding: 1rem 1.1rem; background: rgba(255,255,255,.03); border: 1px solid var(--borda); border-radius: 5px; font: 400 .95rem/1.5 var(--corpo); color: var(--txt); transition: border-color .45s ease, background .45s ease, opacity .6s ease, box-shadow .45s ease; }
+  .qop:hover { border-color: rgba(125,80,245,.9); background: rgba(109,59,240,.14); }
+  .qop:focus-visible { outline: 3px solid var(--ouro); outline-offset: 3px; }
+  .qops.feito .qop { cursor: default; opacity: .4; border-color: var(--borda); background: rgba(255,255,255,.03); }
+  .qops.feito .qop.certa { opacity: 1; border-color: var(--ouro); background: rgba(240,201,41,.12); box-shadow: 0 0 26px rgba(240,201,41,.18); }
+  .qops.feito .qop.errada { opacity: 1; border-color: #e5566d; background: rgba(229,86,109,.12); }
+  .qfeed { min-height: 3.2rem; margin-top: 1.3rem; font-size: .92rem; line-height: 1.65; color: var(--lav); font-weight: 300; opacity: 0; transition: opacity .7s ease; }
+  .qfeed.on { opacity: 1; }
+  .qfeed b { color: var(--ouro); font-weight: 600; }
+  .qacoes { margin-top: .8rem; display: flex; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .7s ease; }
+  .qacoes.on { opacity: 1; pointer-events: auto; }
+  .rnum { font-family: var(--titulo); font-weight: 600; font-size: clamp(3.6rem, 16vw, 5.4rem); color: var(--ouro); line-height: 1.1; margin: 1rem 0 .6rem; }
+  .rdet { white-space: pre-line; font-size: .9rem; color: var(--lav); font-weight: 300; line-height: 1.8; }
+
+  /* ---------- Barra do topo e rodapé ---------- */
+  .barra-topo { position: fixed; top: 0; left: 0; right: 0; z-index: 10; height: 3.4rem; display: flex; align-items: center; justify-content: space-between; padding: 0 1.2rem; background: rgba(7,4,15,.9); border-bottom: 1px solid var(--borda); }
+  .marca { all: unset; cursor: pointer; font: 700 .9rem var(--titulo); letter-spacing: .08em; text-transform: uppercase; color: var(--ouro); }
+  .hamb { all: unset; cursor: pointer; color: var(--txt); font-size: 1.3rem; padding: .3rem .5rem; }
+  .links { position: absolute; top: 3.4rem; left: 0; right: 0; display: flex; flex-direction: column; background: rgba(12,7,32,.98); border-bottom: 1px solid var(--borda); opacity: 0; pointer-events: none; transition: opacity .4s ease; }
+  .barra-topo.aberto .links { opacity: 1; pointer-events: auto; }
+  .links button { all: unset; cursor: pointer; padding: 1rem 1.4rem; font: 500 .78rem var(--corpo); letter-spacing: .08em; text-transform: uppercase; color: var(--lav); transition: color .3s ease, background .3s ease; }
+  .links button:hover { color: var(--ouro); background: rgba(109,59,240,.12); }
+  .marca:focus-visible, .hamb:focus-visible, .links button:focus-visible { outline: 3px solid var(--ouro); outline-offset: 3px; }
+  .rodape { margin-top: auto; padding-top: 3.5rem; text-align: center; font-size: .75rem; color: var(--lav); opacity: .55; font-weight: 300; }
+  @media (min-width: 700px) { .barra-topo { padding: 0 2rem; } .hamb { display: none; } .links { position: static; flex-direction: row; background: none; border: 0; opacity: 1; pointer-events: auto; } .links button { padding: .5rem 1rem; } #cena-menu { max-width: 50rem; } .menu-cards { grid-template-columns: 1fr 1fr; } }
+
+  /* ---------- Quiz no estilo do Ordem Vocacional ---------- */
+  .btn:disabled { opacity: .35; cursor: default; box-shadow: none; }
+  .h1q { font: 600 clamp(2.1rem, 9vw, 3.4rem)/1.12 var(--titulo); text-transform: uppercase; color: #f1ecff; margin: .9rem 0 .7rem; }
+  .painel { width: 100%; text-align: left; background: linear-gradient(180deg, #1b1236, var(--card)); border: 1px solid var(--borda); border-top-color: rgba(240,201,41,.4); border-radius: 6px; padding: 1.8rem 1.5rem; }
+  .painel h2 { font: 700 1.1rem var(--titulo); text-transform: uppercase; letter-spacing: .03em; color: var(--ouro); margin-bottom: .8rem; }
+  .painel p { font-size: .92rem; line-height: 1.8; color: var(--lav); font-weight: 300; }
+  .painel .como { font: 700 .92rem var(--titulo); color: #f1ecff; margin: 1.5rem 0 .8rem; }
+  .painel ul { list-style: none; display: grid; gap: .6rem; margin-bottom: 1.7rem; }
+  .painel li { position: relative; padding-left: 1.5rem; font-size: .9rem; line-height: 1.65; color: var(--lav); font-weight: 300; }
+  .painel li::before { content: "◇"; position: absolute; left: 0; top: .1rem; color: var(--ouro); font-size: .8rem; }
+  .botoes.esq { justify-content: flex-start; margin-top: 0; }
+  .qhead { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.1rem; }
+  .qhead h2 { font: 600 clamp(1.6rem, 6vw, 2.1rem) var(--titulo); text-transform: uppercase; color: #f1ecff; margin-top: .45rem; }
+  .qcont { font: 500 .9rem var(--corpo); color: var(--lav); padding-bottom: .25rem; }
+  .qnav { display: flex; justify-content: space-between; gap: .8rem; margin-top: 1.4rem; }
+  .painel .barra { margin-bottom: 1.6rem; }
+  .qop { display: flex; align-items: center; gap: .9rem; padding: .95rem 1.1rem; }
+  .le { flex: none; display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border: 1px solid rgba(240,201,41,.55); border-radius: 50%; color: var(--ouro); font: 700 .75rem var(--titulo); transition: background .45s ease, color .45s ease, border-color .45s ease; }
+  .qops.feito .qop.certa .le { background: var(--ouro); color: #2a1b00; border-color: var(--ouro); }
+  .qops.feito .qop.errada .le { border-color: #e5566d; color: #e5566d; }
+  .opcao, .mom { border-top-color: rgba(240,201,41,.35); }
+
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 </style>
 </head>
@@ -197,20 +359,95 @@ const MENSAGENS = {
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="zoom" id="zoom"><img alt="Print ampliado" id="zoomImg"></div>
 
+<header class="barra-topo" id="barraTopo">
+  <button class="marca" data-ir="cena-menu" type="button"><span aria-hidden="true">◇</span> <span data-t="topo.marca"></span></button>
+  <button class="hamb" id="menuBtn" type="button" aria-expanded="false" aria-label="Abrir menu">☰</button>
+  <nav class="links">
+    <button data-ir="cena-menu" type="button" data-t="topo.menu"></button>
+    <button data-ir="cena-mom" type="button" data-t="topo.carta"></button>
+    <button data-ir="cena-quiz-intro" type="button" data-t="topo.quiz"></button>
+  </nav>
+</header>
+
 <main>
   <section class="cena ativa" id="intro">
     <span class="eyebrow" id="aRotulo"></span>
     <h1><span id="aTitulo"></span> <b id="nome"></b></h1>
-    <div class="divisor" aria-hidden="true">♥</div>
+    <div class="divisor" aria-hidden="true">◇</div>
     <p class="sub" id="aSub"></p>
     <button class="btn" id="comecar" type="button"></button>
   </section>
 
+  <section class="cena" id="cena-menu">
+    <div class="topo">
+      <span class="eyebrow" data-t="menu.rotulo"></span>
+      <h2 data-t="menu.titulo"></h2>
+      <div class="divisor" aria-hidden="true">◇</div>
+      <p class="sub" data-t="menu.subtitulo"></p>
+    </div>
+    <div class="menu-cards">
+      <button class="opcao" id="opCarta" data-ir="cena-mom" type="button"><span class="ic" aria-hidden="true">♥</span><h3 data-t="menu.carta.titulo"></h3><p data-t="menu.carta.texto"></p></button>
+      <button class="opcao" id="opQuiz" data-ir="cena-quiz-intro" type="button"><span class="ic" aria-hidden="true">?</span><h3 data-t="menu.quiz.titulo"></h3><p data-t="menu.quiz.texto"></p></button>
+    </div>
+  </section>
+
+  <section class="cena" id="cena-quiz-intro">
+    <div class="topo">
+      <span class="eyebrow" data-t="quiz.rotulo"></span>
+      <h1 class="h1q" data-t="quiz.titulo"></h1>
+      <p class="sub" data-t="quiz.subtitulo"></p>
+      <div class="divisor" aria-hidden="true">◇</div>
+    </div>
+    <div class="painel">
+      <h2 data-t="quiz.boasVindas"></h2>
+      <p data-t="quiz.intro"></p>
+      <h3 class="como" data-t="quiz.comoTitulo"></h3>
+      <ul id="comoLista"></ul>
+      <div class="botoes esq">
+        <button class="btn" id="qComecar" type="button" data-t="quiz.botaoComecar"></button>
+        <button class="btn sec" data-ir="cena-menu" type="button" data-t="quiz.botaoMenu"></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cena" id="cena-quiz">
+    <div class="qcartao" id="qCartao">
+      <div class="qhead">
+        <div><span class="eyebrow" id="qSecao"></span><h2 id="qNum"></h2></div>
+        <span class="qcont" id="qCont"></span>
+      </div>
+      <div class="painel">
+        <div class="barra"><i id="qBarra"></i></div>
+        <h3 class="qtexto" id="qTexto"></h3>
+        <div class="qops" id="qOps"></div>
+        <p class="qfeed" id="qFeed" aria-live="polite"></p>
+      </div>
+      <div class="qnav">
+        <button class="btn sec" id="qVolta" type="button" data-t="quiz.voltar"></button>
+        <button class="btn" id="qProx" type="button"></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cena" id="cena-resultado">
+    <span class="eyebrow" data-t="quiz.resultadoTitulo"></span>
+    <div class="rnum" id="rNum"></div>
+    <p class="rdet" id="rDet"></p>
+    <div class="divisor" aria-hidden="true">◇</div>
+    <p class="sub" id="rMsg"></p>
+    <div class="botoes">
+      <button class="btn" data-ir="cena-mom" type="button" data-t="quiz.irCarta"></button>
+      <button class="btn sec" id="qRefazer" type="button" data-t="quiz.refazer"></button>
+    </div>
+    <button class="voltar" style="align-self:center;margin:1.6rem 0 0" data-ir="cena-menu" type="button" data-t="menu.voltar"></button>
+  </section>
+
   <section class="cena" id="cena-mom">
+    <button class="voltar" data-ir="cena-menu" type="button" data-t="menu.voltar"></button>
     <div class="topo">
       <span class="eyebrow" id="mRotulo"></span>
       <h2 id="mTitulo"></h2>
-      <div class="divisor" aria-hidden="true">♥</div>
+      <div class="divisor" aria-hidden="true">◇</div>
       <p class="sub" id="mSub"></p>
     </div>
     <div id="momentos"></div>
@@ -244,9 +481,12 @@ const MENSAGENS = {
       <div class="botoes">
         <button class="btn" id="chuva" type="button"></button>
         <button class="btn sec" id="reler" type="button"></button>
+        <button class="btn sec" data-ir="cena-quiz-intro" type="button" data-t="final.botaoQuiz"></button>
       </div>
+      <button class="voltar" style="align-self:center;margin:1.4rem 0 0" data-ir="cena-menu" type="button" data-t="menu.voltar"></button>
     </div>
   </section>
+  <footer class="rodape" data-t="rodape"></footer>
 </main>
 
 <script>
@@ -268,6 +508,9 @@ const MENSAGENS = {
   $("data").textContent = M.dataCarta; $("saudacao").textContent = M.carta.saudacao;
   $("despedida").textContent = M.carta.despedida; $("de").textContent = M.seuNome; $("pular").textContent = M.carta.pular;
   $("legDias").textContent = M.final.legendaDias; $("chuva").textContent = M.final.botaoChuva; $("reler").textContent = M.final.botaoReler;
+
+  /* textos novos (menu, quiz, botões): ligados pelo atributo data-t */
+  document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = el.dataset.t.split(".").reduce((o, k) => (o ? o[k] : ""), M); });
 
   /* ---------- Corações lentos e suaves ---------- */
   const fx = $("fx"), fc = fx.getContext("2d");
@@ -340,14 +583,85 @@ const MENSAGENS = {
       }, reduz ? 0 : 650);
     });
   }
-  $("comecar").addEventListener("click", async () => { if (ocupado) return; ocupado = true; try { chuva(8); await trocar("intro", "cena-mom"); observar(); } finally { ocupado = false; } });
-  $("irCarta").addEventListener("click", async () => { if (ocupado) return; ocupado = true; try { await trocar("cena-mom", "cena-env"); } finally { ocupado = false; } });
+  $("comecar").addEventListener("click", async () => { if (ocupado) return; ocupado = true; try { chuva(8); await trocar("intro", "cena-menu"); } finally { ocupado = false; } });
+  $("irCarta").addEventListener("click", async () => { if (ocupado) return; ocupado = true; try { $("envelope").setAttribute("aria-expanded", "false"); await trocar("cena-mom", "cena-env"); } finally { ocupado = false; } });
   $("envelope").addEventListener("click", async () => {
     const e = $("envelope"); if (ocupado || e.getAttribute("aria-expanded") === "true") return; ocupado = true;
     e.setAttribute("aria-expanded", "true");
     try { await new Promise((ok) => setTimeout(ok, reduz ? 0 : 1300)); await trocar("cena-env", "cena-carta"); } finally { ocupado = false; }
     ler();
   });
+
+  /* ---------- Navegação entre as partes ---------- */
+  function fecharMenu() { $("menuBtn").setAttribute("aria-expanded", "false"); $("barraTopo").classList.remove("aberto"); }
+  $("menuBtn").addEventListener("click", () => { const a = $("menuBtn").getAttribute("aria-expanded") === "true"; $("menuBtn").setAttribute("aria-expanded", String(!a)); $("barraTopo").classList.toggle("aberto", !a); });
+  function trocarPara(id) {
+    fecharMenu();
+    const atual = document.querySelector(".cena.ativa");
+    if (ocupado || !atual || atual.id === id) return Promise.resolve();
+    if (atual.id === "cena-carta") { leituraId++; clearTimeout(fimLeitura); cancelAnimationFrame(seguindo); }
+    ocupado = true;
+    return trocar(atual.id, id).then(() => { if (id === "cena-mom") observar(); }).finally(() => { ocupado = false; });
+  }
+  document.querySelectorAll("[data-ir]").forEach((el) => el.addEventListener("click", () => trocarPara(el.dataset.ir)));
+
+  /* ---------- Quiz do casal ---------- */
+  const Q = M.quiz, LETRAS = ["A", "B", "C", "D"];
+  Q.comoFunciona.forEach((t) => { const li = document.createElement("li"); li.textContent = t; $("comoLista").appendChild(li); });
+  let perg = [], resp = [], qi = 0, mudando = false;
+  const embaralhar = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  function novoQuiz() {
+    perg = Q.perguntas.map((p) => ({ ...p, ops: embaralhar([{ t: p.correta, ok: true }].concat(p.erradas.map((t) => ({ t, ok: false })))) }));
+    resp = []; qi = 0; mostrar(true);
+  }
+  function mostrar(primeira) {
+    const c = $("qCartao"), p = perg[qi];
+    const pintar = () => {
+      $("qSecao").textContent = p.secao === "eu" ? Q.secaoEu : Q.secaoNos;
+      $("qNum").textContent = Q.tituloPergunta + " " + (qi + 1);
+      $("qCont").textContent = (qi + 1) + "/" + perg.length;
+      $("qBarra").style.width = (qi / perg.length * 100) + "%";
+      $("qTexto").textContent = p.pergunta;
+      const box = $("qOps"); box.className = "qops"; box.innerHTML = "";
+      p.ops.forEach((o, i) => {
+        const b = document.createElement("button"); b.type = "button"; b.className = "qop"; b.innerHTML = '<span class="le"></span><span></span>';
+        b.firstChild.textContent = LETRAS[i]; b.lastChild.textContent = o.t; b.addEventListener("click", () => responder(i)); box.appendChild(b);
+      });
+      $("qFeed").className = "qfeed"; $("qFeed").textContent = "";
+      $("qVolta").disabled = qi === 0; $("qProx").disabled = true;
+      $("qProx").textContent = qi === perg.length - 1 ? Q.verResultado : Q.proxima;
+      if (resp[qi] !== undefined) aplicar(resp[qi]);
+      c.classList.remove("some"); mudando = false;
+    };
+    if (primeira) pintar(); else { mudando = true; c.classList.add("some"); setTimeout(pintar, 400); }
+  }
+  function aplicar(i) {
+    const p = perg[qi], box = $("qOps"), bs = box.querySelectorAll(".qop");
+    box.classList.add("feito");
+    bs.forEach((b, k) => { if (p.ops[k].ok) b.classList.add("certa"); });
+    const ok = p.ops[i].ok; if (!ok) bs[i].classList.add("errada");
+    const f = $("qFeed"), t = document.createElement("b");
+    t.textContent = ok ? Q.acerto : Q.erro + " " + p.correta; f.textContent = ""; f.appendChild(t);
+    if (p.nota) f.append(" " + p.nota);
+    f.classList.add("on"); $("qProx").disabled = false;
+    $("qBarra").style.width = ((qi + 1) / perg.length * 100) + "%";
+  }
+  function responder(i) { if (mudando || resp[qi] !== undefined) return; resp[qi] = i; aplicar(i); }
+  $("qVolta").addEventListener("click", () => { if (mudando || qi === 0) return; qi--; mostrar(false); });
+  $("qProx").addEventListener("click", () => { if (mudando || resp[qi] === undefined) return; if (qi < perg.length - 1) { qi++; mostrar(false); } else fimQuiz(); });
+  function fimQuiz() {
+    let nos = 0, eu = 0;
+    perg.forEach((p, k) => { if (p.ops[resp[k]].ok) { if (p.secao === "eu") eu++; else nos++; } });
+    const total = nos + eu, nN = perg.filter((p) => p.secao !== "eu").length, nE = perg.length - nN;
+    $("rNum").textContent = total + "/" + perg.length;
+    $("rDet").textContent = Q.secaoNos + ": " + nos + "/" + nN + "\n" + Q.secaoEu + ": " + eu + "/" + nE;
+    const r = Q.resultados.slice().sort((a, b) => b.minimo - a.minimo).find((x) => total >= x.minimo) || Q.resultados[Q.resultados.length - 1];
+    $("rMsg").textContent = r.texto; $("opQuiz").classList.add("feito");
+    trocarPara("cena-resultado").then(() => { if (total >= 7) chuva(22); });
+  }
+  $("qComecar").addEventListener("click", () => { novoQuiz(); trocarPara("cena-quiz"); });
+  $("qRefazer").addEventListener("click", () => { novoQuiz(); trocarPara("cena-quiz"); });
 
   /* ---------- Leitura: cada palavra recebe seu tempo e o CSS faz o fade, sem engasgos ---------- */
   let fimLeitura = null, seguindo = 0, usuario = false, leituraId = 0;
@@ -393,7 +707,7 @@ const MENSAGENS = {
 
   function terminar(rapido) {
     cancelAnimationFrame(seguindo);
-    $("pular").style.display = "none"; $("final").classList.add("on");
+    $("pular").style.display = "none"; $("final").classList.add("on"); $("opCarta").classList.add("feito");
     const d = Math.max(0, Math.floor((new Date() - new Date(M.inicio + "T00:00:00")) / 86400000));
     $("num").textContent = d.toLocaleString("pt-BR");
     fimLeitura = setTimeout(() => { $("depois").classList.add("vis"); chuva(26); $("depois").scrollIntoView({ block: "center", behavior: "smooth" }); }, rapido ? 700 : 1800);
